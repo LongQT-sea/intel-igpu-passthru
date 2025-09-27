@@ -29,8 +29,8 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 | Sandy Bridge (2nd gen) | [`SNB_GOPv2_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/SNB_GOPv2_igd.rom) | v2 | Core i3/i5/i7 2xxx |
 | Ivy Bridge (3rd gen) | [`IVB_GOPv3_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/IVB_GOPv3_igd.rom) | v3 | Core i3/i5/i7 3xxx |
 | Haswell/Broadwell (4th/5th gen) | [`HSW_BDW_GOPv5_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/HSW_BDW_GOPv5_igd.rom) | v5 | Core i3/i5/i7 4xxx-5xxx |
-| Skylake-Comet Lake (6th/10th gen) | [`SKL_CML_GOPv9_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/SKL_CML_GOPv9_igd.rom) | v9 | Core i3/i5/i7 6xxx-10xxx |
-| Coffee-Comet Lake (8th/10th gen) | [`CFL_CML_GOPv9.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom) | v9.1 | Core i3/i5/i7 8xxx-10xxx |
+| Skylake to Comet Lake (6/7/8/9/10th gen) | [`SKL_CML_GOPv9_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/SKL_CML_GOPv9_igd.rom) | v9 | Core i3/i5/i7 6xxx-10xxx |
+| Coffee/Comet Lake (8/9/10th gen) | [`CFL_CML_GOPv9.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom) | v9.1 | Core i3/i5/i7 8xxx-10xxx |
 | Gemini Lake (Low-end Pentium/Celeron) | [`GLK_GOPv13_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/GLK_GOPv13_igd.rom) | v13 | Pentium/Celeron J/N 4xxx/5xxx |
 | Ice Lake (10th gen mobile) | [`ICL_GOPv14_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ICL_GOPv14_igd.rom) | v14 | Core i3/i5/i7 10**G1/4/7 |
 | Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17_igd.rom) | v17 | Core i3/i5/i7 11xx-14xxx |
@@ -67,11 +67,14 @@ hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom
 - **Machine Type**: `-machine pc`
 - **Display**: `-vga none `
 - **Firmware**: `-bios /path/to/ovmf` or `-pflash /path/to/ovmf`
-- **iGPU PCI device**: `-device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file`
+- **iGPU PCI device**: 
+```
+-device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file
+```
 
 ### Supported Guest Operating Systems
-- ✅ Windows 10/11
-- ✅ Linux (Ubuntu, Fedora)
+- ✅ Windows
+- ✅ Linux
 - ✅ macOS
 
 ## 📚 Additional Documentation
