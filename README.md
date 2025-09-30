@@ -49,7 +49,10 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 - **Machine Type**: `i440fx` (REQUIRED for legacy mode, Q35 could work, but there's no UEFI GOP display output)
 - **Display**: `none` (REQUIRED for legacy mode)
 - **BIOS**: UEFI/OVMF
-- **PCI device**: open Proxmox VE Shell and run `qm set VMID -hostpci0 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom`
+- **PCI device**: open Proxmox VE Shell and run:
+```
+qm set VMID -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom
+```
 
 #### Example Configuration for Skylake to Comet Lake:
 Edit `/etc/pve/qemu-server/[VMID].conf`:
