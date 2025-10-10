@@ -6,7 +6,7 @@ It can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
 
 ## 📋 Requirements
 
-- Intel CPU with integrated graphics (2rd gen and newer)
+- Intel CPU with integrated graphics (2nd gen and newer)
 - Mainboard with VT-d/IOMMU support
 - **Proxmox VE**: 8.0+
 - **Linux Distros**: 2022+ Debian, Fedora, Arch based Linux distro with QEMU/KVM
@@ -18,9 +18,10 @@ It can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
 
 Choose the appropriate ROM file for your Intel CPU and download/copy in to `/usr/share/kvm/`:
 ```
-Copy from other machine:
+# Copy from other machine:
 scp rom_file_name.rom root@proxmox-IP:/usr/share/kvm/
-Direct download using Proxmox Shell:
+
+# Direct download using Proxmox Shell:
 curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 ```
 
