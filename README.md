@@ -1,17 +1,16 @@
-# Intel iGPU Full Passthrough guide for Proxmox/QEMU/KVM
 ## 🎯 Overview
 
-This repository provides ROM/VBIOS images for QEMU/KVM use. It enables full Intel iGPU passthrough to a guest VM using the legacy‑mode Intel Graphics Device (IGD) assignment via vfio‑pci. In effect, it gives a single VM complete, dedicated iGPU access, with direct UEFI output over HDMI, eDP, and DisplayPort monitor output support.
+This repository provides ROM/VBIOS images for use with PVE/QEMU/KVM. It enables full Intel iGPU passthrough to a guest VM using legacy-mode Intel Graphics Device (IGD) assignment via `vfio-pci`. This setup grants a single VM exclusive iGPU access, including direct UEFI output over HDMI, eDP, and DisplayPort.
 
 It can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
 
 ## 📋 Requirements
 
-- Intel CPU with integrated graphics (3rd gen and newer)
-- Mobo with VT-d/IOMMU support
+- Intel CPU with integrated graphics (2rd gen and newer)
+- Mainboard with VT-d/IOMMU support
 - **Proxmox VE**: 8.0+
 - **Linux Distros**: 2022+ Debian, Fedora, Arch based Linux distro with QEMU/KVM
-- **Host kernel** IOMMU and VFIO enabled
+- **Host kernel** with IOMMU enabled (IOMMU is enabled by default on Proxmox VE 8.4 and later)
 
 ## 🛠️ Setup Instructions
 
@@ -19,8 +18,9 @@ It can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
 
 Choose the appropriate ROM file for your Intel CPU and download/copy in to `/usr/share/kvm/`:
 ```
+Copy from other machine:
 scp rom_file_name.rom root@proxmox-IP:/usr/share/kvm/
-or:
+Direct download using Proxmox Shell:
 curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 ```
 
@@ -33,8 +33,8 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 | Coffee/Comet Lake (8/9/10th gen) | [`CFL_CML_GOPv9.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom) | v9.1 | Core i3/i5/i7/i9 8xxx-10xxx |
 | Gemini Lake (Low-end Pentium/Celeron) | [`GLK_GOPv13_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/GLK_GOPv13_igd.rom) | v13 | Pentium/Celeron J/N 4xxx/5xxx |
 | Ice Lake (10th gen mobile) | [`ICL_GOPv14_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ICL_GOPv14_igd.rom) | v14 | Core i3/i5/i7 10xxG1/4/7 |
-| Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17_igd.rom) | v17 | Core i3/i5/i7/i9 11xx-14xxx |
-| Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17.1_igd.rom) | v17.1 | Core i3/i5/i7/i9 11xx-14xxx |
+| Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17_igd.rom) | v17 | Core i3/i5/i7/i9 11xxx-14xxx |
+| Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17.1_igd.rom) | v17.1 | Core i3/i5/i7/i9 11xxx-14xxx |
 | Alder/Twin Lake N-series processors | [`ADL-N_TWL_GOPv21_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ADL-N_TWL_GOPv21_igd.rom) | v21 |  N97/N1xx/N2xx/N3xx |
 | Arrow/Meteor Lake | [`ARL_MTL_GOPv22_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ARL_MTL_GOPv22_igd.rom) | v22 | Core Ultra series |
 | Lunar Lake | `(unknown)` | (unknown) | Core Ultra series |
