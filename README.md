@@ -79,7 +79,8 @@ hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom
 ### Supported Guest Operating Systems
 - ✅ Windows
 - ✅ Linux
-- ✅ macOS
+- ✅ macOS ([Read this before using iGPU passthrough with macOS
+](https://github.com/LongQT-sea/intel-igpu-passthru/blob/main/macOS_README.md))
 
 ## 📚 Additional Resource and Documentation
 

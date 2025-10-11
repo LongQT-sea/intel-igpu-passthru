@@ -1,9 +1,5 @@
 # Using Intel iGPU Passthrough with macOS VM
 
-Read this if you want to use your Intel iGPU with a macOS virtual machine.
-
----
-
 ### 1. Check your iGPU device ID
 
 Run:
@@ -60,3 +56,7 @@ You have two options:
    ```
    -cpu Skylake-Client-v4,vendor=GenuineIntel,+invtsc,model=158
    ```
+
+### 5. Device Properties
+
+After configuring the CPUID, it should work if you have a native iGPU. If you don’t, you must modify **DeviceProperties** in `config.plist`. For details, see the [Dortania Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/).
