@@ -27,7 +27,7 @@ Go to the Coffee Lake section in [WhateverGreen/Manual/FAQ.IntelHD.en.md](https:
 
 ---
 
-### 3. Example configurations
+### 3. Example spoofing iGPU device ID
 
 **Proxmox VE:**
 
@@ -45,7 +45,7 @@ hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom,device-id=0x3e
 
 ### 4. CPU Models
 
-macOS will now detect the native iGPU, but for macOS to natively load it properly, you must emulate a compatible CPUID.
+macOS will now detect the native iGPU, but for macOS to natively load it properly, you must emulate a compatible CPUID model.
 For Coffee Lake, the CPUID model is `158`.
 
 You have two options:
@@ -59,4 +59,4 @@ You have two options:
 
 ### 5. Device Properties
 
-After configuring the CPUID, it should work if you have a native iGPU. If you don’t, you must modify **DeviceProperties** in `config.plist`. For details, see the [Dortania Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/).
+After configuring the CPUID, it should work if you have a natively supported iGPU. If you don’t, you must modify **DeviceProperties** in `config.plist`. For details, see the [Dortania Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/).
