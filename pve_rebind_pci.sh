@@ -2,7 +2,8 @@
 # Copyright (c) 2024-2025, LongQT-sea
 
 #####################################################
-# Purpose: Automatically unbind vfio driver and rebind host driver on the iGPU and USB PCI device
+# Purpose: Automatically rebind PCI devices (Intel iGPU and USB controller) to their host drivers
+# after a VM using them via vfio-pci is stopped.
 # Location: /var/lib/vz/snippets/pve_rebind_pci.sh
 # Usage: qm set [VMID] --hookscript local:snippets/pve_rebind_pci.sh
 #####################################################
