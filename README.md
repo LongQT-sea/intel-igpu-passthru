@@ -1,20 +1,30 @@
 ## 🎯 Overview
-
-This repository provides ROM/VBIOS images for use with PVE/QEMU/KVM. It enables full Intel iGPU passthrough to a guest VM using legacy-mode Intel Graphics Device (IGD) assignment via `vfio-pci`. This setup grants a single VM exclusive iGPU access, including direct UEFI output over HDMI, eDP, and DisplayPort.
-
-It can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
+- OpROM/VBIOS for use with GVT-d iGPU passthrough on Proxmox/QEMU/KVM.
+- Support direct UEFI output over HDMI, eDP, and DisplayPort.
+- Provides perfect display without screen distortion.
+- Can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
 
 ## 📋 Requirements
-
 - Intel CPU with integrated graphics (2nd gen and newer)
 - Mainboard with VT-d/IOMMU support
 - **Proxmox VE**: 8.0+
 - **Linux Distros**: 2022+ Debian, Fedora, Arch based Linux distro with QEMU/KVM
 - **Host kernel** with IOMMU enabled (IOMMU is enabled by default on Proxmox VE 8.4 and later)
 
+> [!IMPORTANT]
+> Make sure your `/etc/modprobe.d/vfio.conf` does not contain `disable_vga=1`. If present, remove it, update initramfs, and reboot.
+
+> [!TIP]
+> If you have kernel 6.8+, this will work without going through typical PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
+
+> [!NOTE]
+> macOS requires additional configuration: [macOS_README.md](macOS_README.md)
+
+---
+
 ## 🛠️ Setup Instructions
 
-### ROM File Selection
+### 1. ROM File Selection
 
 Choose the appropriate ROM file for your Intel CPU and download/copy in to `/usr/share/kvm/`:
 ```
@@ -42,20 +52,20 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 
 #### sha256sum: [Release page](https://github.com/LongQT-sea/intel-igpu-passthru/releases)
 
-## 🖥️ Proxmox VE
+---
 
-### VM Configuration Requirements
+### 2. VM Configuration
 
-**VM Settings:**
-- **Machine Type**: `i440fx` (REQUIRED for legacy mode, Q35 could work, but there's no UEFI GOP display output)
+### 🖥️ Proxmox VE
+- **Machine Type**: `i440fx` (REQUIRED for legacy mode)
 - **Display**: `none` (REQUIRED for legacy mode)
 - **BIOS**: UEFI/OVMF
-- **PCI device**: open Proxmox VE Shell and run:
+- **PCI device**: Open Proxmox VE Shell and run:
 ```
-qm set VMID -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom
+qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom
 ```
 
-#### Example Configuration for Skylake to Comet Lake:
+Example Configuration for Skylake to Comet Lake:
 Edit `/etc/pve/qemu-server/[VMID].conf`:
 
 ```
@@ -65,28 +75,30 @@ bios: ovmf
 hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom
 ```
 
-## 🐧 Other Linux Distributions (QEMU/KVM)
+> [!TIP]
+> In legacy mode passthrough, these custom args are not needed
+>
+> `-set device.hostpci0.bus=pci.0 -set device.hostpci0.addr=02.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on`
 
-### QEMU Command Line args
+---
+
+### 🐧 Other Linux Distributions (QEMU/KVM)
+
+**QEMU Command Line args**:
 - **Machine Type**: `-machine pc`
-- **Display**: `-vga none `
+- **Display**: `-vga none`
 - **Firmware**: `-bios /path/to/ovmf` or `-pflash /path/to/ovmf`
 - **iGPU PCI device**: 
 ```
 -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file
 ```
 
-### Supported Guest Operating Systems
-- ✅ Windows
-- ✅ Linux
-- ✅ macOS ([Read this before using iGPU passthrough with macOS
-](https://github.com/LongQT-sea/intel-igpu-passthru/blob/main/macOS_README.md))
+---
 
 ## 📚 Additional Resource and Documentation
 
 - [DXE drivers supporting VFIO IGD passthrough](https://github.com/tomitamoeko/VfioIgdPkg)
 - [QEMU igd-assign.txt](https://github.com/qemu/qemu/blob/master/docs/igd-assign.txt)
-- [Proxmox VE GPU Passthrough Guide](https://pve.proxmox.com/wiki/PCI_Passthrough)
 - [Intel GVT-d Documentation](https://github.com/intel/gvt-linux/wiki)
 
 ## 🤝 Contributing
