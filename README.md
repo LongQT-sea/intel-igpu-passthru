@@ -2,7 +2,8 @@
 - OpROM/VBIOS for use with GVT-d iGPU passthrough on Proxmox/QEMU/KVM.
 - Support direct UEFI output over HDMI, eDP, and DisplayPort.
 - Provides perfect display without screen distortion.
-- Can also be used with SR-IOV on 11th gen+ Intel iGPUs to fix error code 43.
+- Supports Windows, Linux, and even **macOS** guests.
+- This ROM can also be used with SR-IOV virtual functions on compatible Intel iGPUs to fix Code 43.[^1]
 
 ## 📋 Requirements
 - Intel CPU with integrated graphics (2nd gen and newer)
@@ -12,13 +13,13 @@
 - **Host kernel** with IOMMU enabled (IOMMU is enabled by default on Proxmox VE 8.4 and later)
 
 > [!IMPORTANT]
-> Make sure your `/etc/modprobe.d/vfio.conf` does not contain `disable_vga=1`. If present, remove it, update initramfs, and reboot.
+> Make sure **`disable_vga=1`** is not set anywhere - in **`/etc/modprobe.d/vfio.conf`** files or in your kernel parameters. If it is, remove it, update grub, initramfs and reboot.
 
 > [!TIP]
-> If you have kernel 6.8+, this will work without going through typical PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
+> If you have Proxmox VE 8.4+, this will work without going through PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
 
 > [!NOTE]
-> macOS requires additional configuration: [macOS_README.md](macOS_README.md)
+> **macOS** requires additional configuration: [macOS_README.md](https://github.com/LongQT-sea/intel-igpu-passthru/blob/main/macOS_README.md)
 
 ---
 
@@ -43,12 +44,17 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 | Skylake to Comet Lake (6/7/8/9/10th gen) | [`SKL_CML_GOPv9_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/SKL_CML_GOPv9_igd.rom) | v9 | Core i3/i5/i7/i9 6xxx-10xxx |
 | Coffee/Comet Lake (8/9/10th gen) | [`CFL_CML_GOPv9.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom) | v9.1 | Core i3/i5/i7/i9 8xxx-10xxx |
 | Gemini Lake (Low-end Pentium/Celeron) | [`GLK_GOPv13_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/GLK_GOPv13_igd.rom) | v13 | Pentium/Celeron J/N 4xxx/5xxx |
-| Ice Lake (10th gen mobile) | [`ICL_GOPv14_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ICL_GOPv14_igd.rom) | v14 | Core i3/i5/i7 10xxG1/4/7 |
+| Ice Lake (10th gen mobile) | [`ICL_GOPv14_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ICL_GOPv14_igd.rom) | v14 | Core i3/i5/i7 10xxG1/G4/G7 |
 | Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17_igd.rom) | v17 | Core i3/i5/i7/i9 11xxx-14xxx |
 | Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17.1_igd.rom) | v17.1 | Core i3/i5/i7/i9 11xxx-14xxx |
+| Jasper Lake (Low-end Pentium/Celeron) | [`JSL_GOPv18_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/JSL_GOPv18_igd.rom) | v18 | Pentium/Celeron N 4xxx/5xxx/6xxx |
 | Alder/Twin Lake N-series processors | [`ADL-N_TWL_GOPv21_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ADL-N_TWL_GOPv21_igd.rom) | v21 |  N97/N1xx/N2xx/N3xx |
 | Arrow/Meteor Lake | [`ARL_MTL_GOPv22_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ARL_MTL_GOPv22_igd.rom) | v22 | Core Ultra series |
 | Lunar Lake | `(unknown)` | (unknown) | Core Ultra series |
+| All Gens - No UEFI display output | [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) | (none) | All Intel CPUs with iGPU[^2] |
+
+> [!Note]
+> **`Universal_noGOP_igd.rom`** does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded.
 
 #### sha256sum: [Release page](https://github.com/LongQT-sea/intel-igpu-passthru/releases)
 
@@ -66,8 +72,7 @@ qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom
 ```
 
 Example Configuration for Skylake to Comet Lake:
-Edit `/etc/pve/qemu-server/[VMID].conf`:
-
+- `/etc/pve/qemu-server/[VMID].conf`:
 ```
 machine: pc
 vga: none
@@ -76,7 +81,7 @@ hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom
 ```
 
 > [!TIP]
-> In legacy mode passthrough, these custom args are not needed
+> In legacy mode passthrough, these custom args are not needed:
 >
 > `-set device.hostpci0.bus=pci.0 -set device.hostpci0.addr=02.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on`
 
@@ -113,3 +118,6 @@ Contributions are welcome! Please:
 This project is provided “as‑is”, without any warranty, for educational and research purposes. In no event shall the authors or contributors be liable for any direct, indirect, incidental, special, or consequential damages arising from use of the project, even if advised of the possibility of such damages.
 
 All product names, trademarks, and registered trademarks are property of their respective owners. All company, product, and service names used in this repository are for identification purposes only.
+
+[^1]: When using Intel iGPU SR-IOV virtual functions, some driver versions may cause a Code 43 error on Windows guests. To ensure compatibility across all driver versions, an OpROM is required.
+[^2]: Sandy Bridge and newer

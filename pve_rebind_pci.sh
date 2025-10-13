@@ -19,7 +19,6 @@ IGPU_ADDR="0000:00:02.0"    # Intel iGPU
 USB_ADDR="0000:00:14.0"     # Intel USB3 controller
 
 # Set to "true" to enable SR-IOV Virtual Functions on iGPU after rebind it to i915 driver
-# Set to "false" to disable SR-IOV
 ENABLE_SRIOV="false"
 
 # Number of SR-IOV Virtual Functions to create (typically 1-7 for Intel iGPU)
@@ -73,7 +72,6 @@ if [ "$PHASE" = "post-stop" ]; then
     done
 
     # Enable SR-IOV Virtual Functions (if configured)
-    # SR-IOV allows splitting one physical GPU into multiple virtual GPUs
     if [ "$ENABLE_SRIOV" = "true" ]; then
         counter=0
         while [ -d /sys/bus/pci/drivers/i915/${IGPU_ADDR} ] && [ $counter -lt $TIMEOUT ]; do
