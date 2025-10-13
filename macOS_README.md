@@ -11,31 +11,31 @@
 
 - Example output:
    ```
-   00:02.0 VGA compatible controller [0300]: Intel Corporation CoffeeLake-H GT2 [UHD Graphics 630] [8086:3e9b] (rev 02)
+   00:02.0 VGA compatible controller [0300]: Intel Corporation Coffee Lake-S GT2 [UHD Graphics P630] [8086:3e94]
    ```
-   In this example, the Coffee Lake iGPU has a device ID of **`0x3e9b`**
+   In this example, the Coffee Lake iGPU has a device ID of **`0x3e94`**
 
 ---
 
 ### 2. Check WhateverGreen documentation
 Go to the Coffee Lake (or whatever Lake you have) section in [WhateverGreen/Manual/FAQ.IntelHD.en.md](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) and look for your device ID:
 
-* If your iGPU device ID appears under ***Native supported DevIDs*** and ***Recommended framebuffers***, great — continue to the [**CPU Models**](#4-cpu-models) section.
-* If it's **not** listed, you'll need to spoof your iGPU's device ID to a natively supported one.
+* If your iGPU device ID appears under ***Native supported DevIDs*** and under `Desktop` or `Laptop` of ***Recommended framebuffers***, great — continue to the [**CPU Models**](#4-cpu-models) section.
+* If it's **not** listed, you'll need to spoof your iGPU's device ID to a native supported device ID from the `Desktop` or `Laptop` category.
 
 ---
 
 ### 3. Spoofing iGPU device ID
+* For example, if you have a `0x3e94`, you need to spoof it to something like `0x3e9b`, which is a Coffee Lake `Desktop` recommended framebuffer.
+  - **Proxmox VE:**
+     ```
+     qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom,device-id=0x3e9b
+     ```
 
-- **Proxmox VE:**
-   ```
-   qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom,device-id=0x3e9b
-   ```
-
-- **QEMU:**
-   ```
-   -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file,x-pci-device-id=0x3e9b
-   ```
+  - **QEMU:**
+     ```
+     -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file,x-pci-device-id=0x3e9b
+     ```
 
 ---
 
@@ -63,3 +63,5 @@ You have two options:
 
 ### 5. Device Properties
 After configuring the CPUID, it should work if you have a natively supported iGPU. If you don't, you must modify **DeviceProperties** in `config.plist`. For details, see the [Dortania OpenCore Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/).
+> [!Tip]
+> In legacy mode passthrough, the default DVMT Pre-Allocated value is 128MB, so `framebuffer-stolenmem` may not be needed.

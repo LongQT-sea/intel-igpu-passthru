@@ -50,7 +50,7 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 | Jasper Lake (Low-end Pentium/Celeron) | [`JSL_GOPv18_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/JSL_GOPv18_igd.rom) | v18 | Pentium/Celeron N 4xxx/5xxx/6xxx |
 | Alder/Twin Lake N-series processors | [`ADL-N_TWL_GOPv21_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ADL-N_TWL_GOPv21_igd.rom) | v21 |  N97/N1xx/N2xx/N3xx |
 | Arrow/Meteor Lake | [`ARL_MTL_GOPv22_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ARL_MTL_GOPv22_igd.rom) | v22 | Core Ultra series |
-| Lunar Lake | `(unknown)` | (unknown) | Core Ultra series |
+| Lunar Lake | [`LNL_GOPv2X.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/LNL_GOPv2X.rom) | (unknown) | Core Ultra series |
 | All Gens - No UEFI display output | [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) | (none) | All Intel CPUs with iGPU[^2] |
 
 > [!Note]
