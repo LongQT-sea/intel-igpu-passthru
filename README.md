@@ -30,8 +30,9 @@
 Choose the appropriate ROM file for your Intel CPU and download/copy it to `/usr/share/kvm/`
 * For example, if you have an i7-8700K (Coffee Lake CPU), right-click `CFL_CML_GOPv9.1_igd.rom` and select **“Copy link address.”**
 * Then, open the Proxmox VE shell and run this command to save it as `igd.rom` in `/usr/share/kvm/`:
+> Replace <ROM_URL> with the link you just copy
 ```bash
-curl -L https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom -o /usr/share/kvm/igd.rom
+curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 ```
 
 | Intel Generation | ROM File | GOP Version | Supported CPUs |
@@ -64,7 +65,8 @@ curl -L https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1
 - **Machine Type**: `i440fx` (REQUIRED for legacy mode)
 - **Display**: `none` (REQUIRED for legacy mode)
 - **BIOS**: UEFI/OVMF
-- **PCI device**: Open Proxmox VE Shell and run (replace [VMID] with your actual VM ID):
+- **PCI device**: Open Proxmox VE Shell and run:
+> Replace `[VMID]` with your real VM ID.
 ```
 qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=igd.rom
 ```
