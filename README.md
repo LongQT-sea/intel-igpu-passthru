@@ -8,15 +8,15 @@
 ## 📋 Requirements
 - Intel CPU with integrated graphics (2nd gen and newer)
 - Mainboard with VT-d/IOMMU support
-- **Proxmox VE**: 8.0+
+- **Proxmox VE** 8.0 and newer
 - **Linux Distros**: 2022+ Debian, Fedora, Arch based Linux distro with QEMU/KVM
-- **Host kernel** with IOMMU enabled (IOMMU is enabled by default on Proxmox VE 8.4 and later)
+- **Host kernel** with IOMMU enabled (IOMMU is enabled by default on Proxmox VE 8.2 and newer)
 
 > [!IMPORTANT]
-> Make sure **`disable_vga=1`** is not set anywhere - in **`/etc/modprobe.d/vfio.conf`** files or in your kernel parameters. If it is, remove it, update grub, initramfs and reboot.
+> Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, update grub, initramfs and reboot.
 
 > [!TIP]
-> If you have Proxmox VE 8.4+, this will work without going through PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
+> With Proxmox VE 8.2 and newer, this will work without going through PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
 
 > [!NOTE]
 > **macOS** requires additional configuration: [macOS_README.md](https://github.com/LongQT-sea/intel-igpu-passthru/blob/main/macOS_README.md)
@@ -27,13 +27,11 @@
 
 ### 1. ROM File Selection
 
-Choose the appropriate ROM file for your Intel CPU and download/copy in to `/usr/share/kvm/`:
-```
-# Copy from other machine:
-scp rom_file_name.rom root@proxmox-IP:/usr/share/kvm/
-
-# Direct download using Proxmox Shell:
-curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
+Choose the appropriate ROM file for your Intel CPU and download/copy it to `/usr/share/kvm/`
+* For example, if you have an i7-8700K (Coffee Lake CPU), right-click `CFL_CML_GOPv9.1_igd.rom` and select **“Copy link address.”**
+* Then, open the Proxmox VE shell and run this command to save it as `igd.rom` in `/usr/share/kvm/`:
+```bash
+curl -L https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom -o /usr/share/kvm/igd.rom
 ```
 
 | Intel Generation | ROM File | GOP Version | Supported CPUs |
@@ -54,7 +52,7 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 | All Gens - No UEFI display output | [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) | (none) | All Intel CPUs with iGPU[^2] |
 
 > [!Note]
-> **`Universal_noGOP_igd.rom`** does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded.
+> `Universal_noGOP_igd.rom` does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded.
 
 #### sha256sum: [Release page](https://github.com/LongQT-sea/intel-igpu-passthru/releases)
 
@@ -66,9 +64,9 @@ curl -L https://rom_url -o /usr/share/kvm/rom_file_name.rom
 - **Machine Type**: `i440fx` (REQUIRED for legacy mode)
 - **Display**: `none` (REQUIRED for legacy mode)
 - **BIOS**: UEFI/OVMF
-- **PCI device**: Open Proxmox VE Shell and run:
+- **PCI device**: Open Proxmox VE Shell and run (replace [VMID] with your actual VM ID):
 ```
-qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom
+qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=igd.rom
 ```
 
 Example Configuration for Skylake to Comet Lake:
@@ -120,4 +118,4 @@ This project is provided “as‑is”, without any warranty, for educational an
 All product names, trademarks, and registered trademarks are property of their respective owners. All company, product, and service names used in this repository are for identification purposes only.
 
 [^1]: When using Intel iGPU SR-IOV virtual functions, some driver versions may cause a Code 43 error on Windows guests. To ensure compatibility across all driver versions, an OpROM is required.
-[^2]: Sandy Bridge and newer
+[^2]: Sandy Bridge and newer, `Universal_noGOP_igd.rom` does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded.

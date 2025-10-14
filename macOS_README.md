@@ -18,10 +18,10 @@
 ---
 
 ### 2. Check WhateverGreen documentation
-Go to the Coffee Lake (or whatever Lake you have) section in [WhateverGreen/Manual/FAQ.IntelHD.en.md](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) and look for your device ID:
+Go to the Coffee Lake (or whatever generation you have) section in [WhateverGreen/Manual/FAQ.IntelHD.en.md](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) and look for your device ID:
 
-* If your iGPU device ID appears under ***Native supported DevIDs*** and under `Desktop` or `Laptop` of ***Recommended framebuffers***, great — continue to the [**CPU Models**](#4-cpu-models) section.
-* If it's **not** listed, you'll need to spoof your iGPU's device ID to a native supported device ID from the `Desktop` or `Laptop` category.
+* If your iGPU device ID appears under ***Native supported DevIDs*** **and** under `Desktop` or `Laptop` in ***Recommended framebuffers***, great — continue to the [**CPU Models**](#4-cpu-models) section.
+* If it's **not** listed, you'll need to spoof your iGPU's device ID to a natively supported device ID from the `Desktop` or `Laptop` category in ***Recommended framebuffers***.
 
 ---
 
@@ -29,7 +29,7 @@ Go to the Coffee Lake (or whatever Lake you have) section in [WhateverGreen/Manu
 * For example, if you have a `0x3e94`, you need to spoof it to something like `0x3e9b`, which is a Coffee Lake `Desktop` recommended framebuffer.
   - **Proxmox VE:**
      ```
-     qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=rom_file_name.rom,device-id=0x3e9b
+     qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=igd.rom,device-id=0x3e9b
      ```
 
   - **QEMU:**
