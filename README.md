@@ -13,7 +13,7 @@
 - **Host kernel** with IOMMU enabled (IOMMU is enabled by default on Proxmox VE 8.2 and newer)
 
 > [!IMPORTANT]
-> Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, update grub, initramfs and reboot.
+> Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, update-grub, update-initramfs and reboot.
 
 > [!TIP]
 > With Proxmox VE 8.2 and newer, this will work without going through PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
@@ -28,8 +28,8 @@
 ### 1. ROM File Selection
 
 Choose the appropriate ROM file for your Intel CPU and download/copy it to `/usr/share/kvm/`
-* For example, if you have an i7-8700K (Coffee Lake CPU), right-click `CFL_CML_GOPv9.1_igd.rom` and select **“Copy link address.”**
-* Then, open the Proxmox VE shell and run this command to save it as `igd.rom` in `/usr/share/kvm/`:
+* For example, if you have an i7-8700K (Coffee Lake CPU), right-click [`CFL_CML_GOPv9.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/CFL_CML_GOPv9.1_igd.rom) and select **“Copy Link Address.”**
+* Then, open the Proxmox VE shell and run the following command to save it as `igd.rom` in `/usr/share/kvm/`:
 > Replace <ROM_URL> with the link you just copy
 ```bash
 curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
@@ -47,13 +47,16 @@ curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 | Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17_igd.rom) | v17 | Core i3/i5/i7/i9 11xxx-14xxx |
 | Rocket/Tiger/Alder/Raptor Lake (11/12/13/14th gen) | [`RKL_TGL_ADL_RPL_GOPv17.1_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/RKL_TGL_ADL_RPL_GOPv17.1_igd.rom) | v17.1 | Core i3/i5/i7/i9 11xxx-14xxx |
 | Jasper Lake (Low-end Pentium/Celeron) | [`JSL_GOPv18_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/JSL_GOPv18_igd.rom) | v18 | Pentium/Celeron N 4xxx/5xxx/6xxx |
-| Alder/Twin Lake N-series processors | [`ADL-N_TWL_GOPv21_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ADL-N_TWL_GOPv21_igd.rom) | v21 |  N97/N1xx/N2xx/N3xx |
-| Arrow/Meteor Lake | [`ARL_MTL_GOPv22_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ARL_MTL_GOPv22_igd.rom) | v22 | Core Ultra series |
+| Alder Lake-N / Twin Lake N-series processors | [`ADL-N_TWL_GOPv21_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ADL-N_TWL_GOPv21_igd.rom) | v21 |  N95/N97/N1xx/N2xx/N3xx |
+| Arrow Lake / Meteor Lake | [`ARL_MTL_GOPv22_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ARL_MTL_GOPv22_igd.rom) | v22 | Core Ultra series |
 | Lunar Lake | [`LNL_GOPv2X.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/LNL_GOPv2X.rom) | (unknown) | Core Ultra series |
-| All Gens - No UEFI display output | [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) | (none) | All Intel CPUs with iGPU[^2] |
+| All Gens - No UEFI GOP | [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) | (none) | All Intel CPUs with iGPU[^2] |
 
 > [!Note]
-> `Universal_noGOP_igd.rom` does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded.
+> [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded. Use this as a last resort if other ROMs cause any issues.
+
+> [!Important]
+> Meteor/Arrow/Lunar Lake require QEMU 10.1.x or newer (`kvm --version`). As of October 2025, this requires Proxmox VE 9 [Test repo](https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_test_repo).
 
 #### sha256sum: [Release page](https://github.com/LongQT-sea/intel-igpu-passthru/releases)
 
@@ -120,4 +123,4 @@ This project is provided “as‑is”, without any warranty, for educational an
 All product names, trademarks, and registered trademarks are property of their respective owners. All company, product, and service names used in this repository are for identification purposes only.
 
 [^1]: When using Intel iGPU SR-IOV virtual functions, some driver versions may cause a Code 43 error on Windows guests. To ensure compatibility across all driver versions, an OpROM is required.
-[^2]: Sandy Bridge and newer, `Universal_noGOP_igd.rom` does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded.
+[^2]: Sandy Bridge and newer, `Universal_noGOP_igd.rom` does not include Intel GOP driver (UEFI Graphics Output Protocol), so the display output will only work after the guest VM drivers are properly loaded. Use this as a last resort if other ROMs cause any issues.
