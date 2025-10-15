@@ -2,6 +2,12 @@
 > [!Important]
 > * Make sure you have a supported iGPU. See [Dortania Intel iGPU Guide](https://dortania.github.io/GPU-Buyers-Guide/modern-gpus/intel-gpu.html).  
 > * This is a reference document — you may need to adapt it based on your iGPU device ID.
+> * Follow this document only if you already have macOS installed and OpenCore EFI copied to the EFI partition on your macOS disk.
+
+> [!Tip]
+> * Installing the macOS VM using the [OpenCore-ISO](https://github.com/LongQT-sea/OpenCore-ISO) project is recommended.
+
+---
 
 ### 1. Check your iGPU device ID
 - Open Proxmox VE shell and run:
@@ -65,3 +71,5 @@ You have two options:
 After configuring the CPUID, it should work if you have a natively supported iGPU. If you don't, you must modify **DeviceProperties** in `config.plist`. For details, see the [Dortania OpenCore Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/).
 > [!Tip]
 > In legacy mode passthrough, the default DVMT Pre-Allocated value is 128MB, so `framebuffer-stolenmem` may not be needed.
+- Example for Coffee Lake:
+<img width="1151" height="629" alt="image" src="https://github.com/user-attachments/assets/47f3078d-a0ac-49a5-91dd-17c0375c19a7" />
