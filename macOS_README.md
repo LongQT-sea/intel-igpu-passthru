@@ -72,4 +72,4 @@ After configuring the CPUID, it should work if you have a natively supported iGP
 > [!Tip]
 > In legacy mode passthrough, the default DVMT Pre-Allocated value is 128MB, so `framebuffer-stolenmem` may not be needed.
 - Example for Coffee Lake:
-<img width="1151" height="629" alt="image" src="https://github.com/user-attachments/assets/47f3078d-a0ac-49a5-91dd-17c0375c19a7" />
+<img width="1191" height="639" alt="image" src="https://github.com/user-attachments/assets/e555da65-c3b3-45c4-bc10-1fd35172a956" />
