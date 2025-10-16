@@ -10,8 +10,8 @@
 
 ## 📋 Requirements
 - Intel CPU with integrated graphics *(2nd gen and newer)*
-- Mainboard with VT-d/IOMMU support
-- **Pure UEFI boot mode** *(CSM must be disabled in BIOS/UEFI settings)*
+- Mainboard with VT-d / IOMMU support.
+- **Pure UEFI boot mode** *(disable Legacy/CSM in BIOS/UEFI settings)*
 - **Proxmox VE** 8.0 and newer
 - **Linux Distros**: 2022+ Debian, Fedora, Arch based Linux distro with QEMU/KVM
 - **Host kernel** with IOMMU enabled *(IOMMU is enabled by default on Proxmox VE 8.2 and newer)*
