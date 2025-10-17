@@ -10,10 +10,10 @@
 
 ## 📋 Requirements
 - Intel CPU with integrated graphics *(2nd gen and newer)*
-- Mainboard with VT-d / IOMMU support.
+- Mainboard with VT-d / IOMMU support *(must be enabled in BIOS)*
 - **Pure UEFI boot mode** *(disable Legacy/CSM in BIOS/UEFI settings)*
 - **Proxmox VE** 8.0 and newer
-- **Linux Distros**: 2022+ Debian, Fedora, Arch based Linux distro with QEMU/KVM
+- **Linux Distros**: Modern Linux distributions (2022+) with QEMU/KVM support
 - **Host kernel** with IOMMU enabled *(IOMMU is enabled by default on Proxmox VE 8.2 and newer)*
 
 > [!IMPORTANT]
@@ -109,10 +109,22 @@ hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom
 
 ## 📚 Additional Resource and Documentation
 
-- [DXE drivers supporting VFIO IGD passthrough](https://github.com/tomitamoeko/VfioIgdPkg)
 - [QEMU igd-assign.txt](https://github.com/qemu/qemu/blob/master/docs/igd-assign.txt)
 - [Intel EDK2 GVT-d patchset (from eci.intel.com)](https://eci.intel.com/docs/3.3/components/kvm-hypervisor.html#build-ovmf-fd-for-kvm)
 - [Intel GVT-d Documentation](https://github.com/intel/gvt-linux/wiki)
+
+## 🙏 Credits & Acknowledgments
+
+### Source Code Authors
+Based on EDK2 patches authored by:
+- **Laszlo Ersek** (Red Hat, Inc.) - IgdAssignmentDxe implementation
+- **Colin Xu** (Intel Corporation) - Platform GOP Policy, OpRegion 2.1 support, and IGD assignment enhancements
+- **Xiong Zhang** (Intel Corporation) - VBT data handling
+
+### Special Thanks
+- [Tomita Moeko](https://github.com/tomitamoeko) for [DXE drivers supporting VFIO IGD passthrough](https://github.com/tomitamoeko/VfioIgdPkg)
+- The **QEMU/KVM Community** for IGD assignment support and documentation
+- All community members who tested and provided feedback
 
 ## 🤝 Contributing
 
@@ -120,6 +132,20 @@ Contributions are welcome! Please:
 1. Test configurations thoroughly
 2. Add new ROM files with proper documentation
 3. Report issues with detailed system information
+
+## 📖 Attribution & License
+
+This project is licensed under the BSD 2-Clause License (see [LICENSE](LICENSE) file).
+
+**If you create content about this project** (videos, blog posts, tutorials, articles):
+- Please link back to this repository: `https://github.com/LongQT-sea/intel-igpu-passthru`
+- Mention that detailed **requirements** and **instructions** are in this GitHub repo.
+
+**If you redistribute this project**:
+- You must retain all copyright notices and license terms as required by the BSD 2-Clause License
+- Include the full license text in your distribution
+
+Thank you for respecting the work that went into this project! 🙏
 
 ## ⚠️ Disclaimer
 
