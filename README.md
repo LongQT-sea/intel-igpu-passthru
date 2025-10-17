@@ -12,11 +12,11 @@
 - Intel CPU with integrated graphics *(2nd gen and newer)*
 - Mainboard with VT-d / IOMMU support *(must be enabled in BIOS)*
 - **Pure UEFI boot mode** *(disable Legacy/CSM in BIOS/UEFI settings)*
-- **Proxmox VE**  
+- **Proxmox VE:**  
   - Intel 10th Gen or older → At least **Proxmox VE 7.4**
   - Intel 11th Gen or newer → At least **Proxmox VE 9.0**
-- **Linux Distros**: Modern Linux distributions with QEMU/KVM support
-- **Host kernel** with IOMMU enabled *(IOMMU is enabled by default on Proxmox VE 8.2 and newer)*
+- **Linux Distros:** Modern Linux distributions with QEMU/KVM support
+- **Host kernel:** with IOMMU enabled *(IOMMU is enabled by default on Proxmox VE 8.2 and newer)*
 
 > [!IMPORTANT]
 > Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, then run `update-grub`, `update-initramfs -u` and reboot.
@@ -25,7 +25,7 @@
 > **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3]. As of October 2025, this requires Proxmox VE 9 [`Test` repository](https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_test_repo).
 
 > [!TIP]
-> With Proxmox VE 8.2 and newer, this will work without going through PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
+> With **Proxmox VE 8.2** and newer, this works without following PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough).
 
 > [!NOTE]
 > **macOS** requires additional configuration: [macOS_README.md](https://github.com/LongQT-sea/intel-igpu-passthru/blob/main/macOS_README.md)
@@ -125,7 +125,8 @@ Based on EDK2 patches authored by:
 
 ### Special Thanks
 - [Tomita Moeko](https://github.com/tomitamoeko) for [DXE drivers supporting VFIO IGD passthrough](https://github.com/tomitamoeko/VfioIgdPkg)
-- The **QEMU/KVM Community** for IGD assignment support and documentation
+- [Alex Williamson](https://github.com/awilliam) for [IGD assignment support in QEMU](https://github.com/qemu/qemu/blob/master/hw/vfio/igd.c)
+- The **QEMU/KVM Community** for [IGD assignment documentation](https://github.com/qemu/qemu/blob/master/docs/igd-assign.txt)
 - All community members who tested and provided feedback
 
 ## 🤝 Contributing
