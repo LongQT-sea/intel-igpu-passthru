@@ -20,7 +20,7 @@
 > Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, update-grub, update-initramfs and reboot.
 
 > [!IMPORTANT]
-> Meteor Lake, Arrow Lake, Lunar Lake and future Intel iGPU require QEMU 10.1.0 or newer (`kvm --version`)[^3]. As of October 2025, this requires Proxmox VE 9 [`Test` repository](https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_test_repo).
+> Raptor Lake, Meteor Lake, Arrow Lake, Lunar Lake and future Intel iGPU require QEMU 10.1.0 or newer (`kvm --version`)[^3]. As of October 2025, this requires Proxmox VE 9 [`Test` repository](https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_test_repo).
 
 > [!TIP]
 > With Proxmox VE 8.2 and newer, this will work without going through PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough)
