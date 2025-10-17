@@ -117,9 +117,9 @@ hostpci0: 0000:00:02.0,legacy-igd=1,romfile=SKL_CML_GOPv9_igd.rom
 
 ### Source Code Authors
 Based on EDK2 patches authored by:
-- **Laszlo Ersek** (Red Hat, Inc.) - IgdAssignmentDxe implementation
-- **Colin Xu** (Intel Corporation) - Platform GOP Policy, OpRegion 2.1 support, and IGD assignment enhancements
-- **Xiong Zhang** (Intel Corporation) - VBT data handling
+* **Colin Xu** (Intel Corporation) & **Laszlo Ersek** (Red Hat, Inc.) — *IgdAssignmentDxe implementation*
+* **Colin Xu** (Intel Corporation) — *Platform GOP Policy, OpRegion 2.1 support, and IGD assignment enhancements*
+* **Xiong Zhang** (Intel Corporation) — *VBT data handling*
 
 ### Special Thanks
 - [Tomita Moeko](https://github.com/tomitamoeko) for [DXE drivers supporting VFIO IGD passthrough](https://github.com/tomitamoeko/VfioIgdPkg)
