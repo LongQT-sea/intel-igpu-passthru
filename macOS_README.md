@@ -4,6 +4,7 @@
 > * This document is a reference — you may need to adjust it for your iGPU device ID.
 > * Follow these steps only if macOS is already installed and the OpenCore EFI folder has been copied to the EFI partition of your macOS disk.
 > * DVMT Pre-Allocated in the BIOS should be set to 128 MB or higher.
+> * Ensure you are using [Legacy Mode](https://github.com/LongQT-sea/intel-igpu-passthru?tab=readme-ov-file#proxmox-ve) for iGPU passthrough.
 
 > [!Tip]
 > * Installing the macOS VM using the [OpenCore-ISO](https://github.com/LongQT-sea/OpenCore-ISO) project is recommended.
