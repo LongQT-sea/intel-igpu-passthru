@@ -89,9 +89,10 @@ curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 ### 2. VM Configuration
 ### Proxmox VE
 
-**Choose a mode:**
-* **Legacy Mode:** Display output (HDMI, eDP, DVI, DisplayPort) works immediately when the VM starts.
-* **UPT Mode:** Display output (HDMI, eDP, DVI, DisplayPort) only works after guest OS drivers are fully loaded.
+**Choose a mode:** This determines how display outputs (HDMI, eDP, DVI, DisplayPort) behave.
+
+* **Legacy Mode:** Display output becomes active as soon as the VM starts.
+* **UPT Mode:** Display output becomes active only after the guest OS drivers have loaded.
 
 ---
 
