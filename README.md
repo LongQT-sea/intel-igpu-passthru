@@ -119,7 +119,6 @@ qm set [VMID] --machine pc \
 > Replace `[VMID]` with your real VM ID.
 ```bash
 qm set [VMID] --machine q35 \
-              --vga vmware \
               --bios ovmf \
               --hostpci0 0000:00:02.0,romfile=igd.rom \
               --args "-set device.hostpci0.bus=pci.0 -set device.hostpci0.addr=2.0 -set device.hostpci0.x-igd-opregion=on"
