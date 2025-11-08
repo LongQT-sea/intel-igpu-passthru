@@ -94,6 +94,11 @@ curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 * **Legacy Mode:** Display output becomes active as soon as the VM starts.
 * **UPT Mode:** Display output becomes active only after the guest OS drivers have loaded.
 
+> [!TIP]
+> **Legacy Mode is recommended for most setups** because:
+> - Display output works immediately on VM start
+> - Better compatibility with various guest operating systems
+
 ---
 
 #### **Legacy Mode**
@@ -110,7 +115,7 @@ qm set [VMID] --machine pc \
 > [!TIP]
 > In legacy mode passthrough, these custom args are not needed:
 >
-> `-set device.hostpci0.bus=pci.0 -set device.hostpci0.addr=2.0 -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-igd-opregion=on -set device.hostpci0.x-vga=on`
+> `-set device.hostpci0.bus=pci.0 -set device.hostpci0.addr=2.0 -set device.hostpci0.x-igd-opregion=on -set device.hostpci0.x-igd-gms=0x2 -set device.hostpci0.x-vga=on`
 
 ---
 

@@ -42,7 +42,7 @@ Go to the Coffee Lake (or whatever generation you have) section in [WhateverGree
 
   - **QEMU:**
      ```
-     -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file,x-pci-device-id=0x3e9b
+     -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=2.0,romfile=/path/to/rom/file,x-pci-device-id=0x3e9b
      ```
 
 ---
