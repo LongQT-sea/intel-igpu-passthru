@@ -91,13 +91,8 @@ curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 
 **Choose a mode:** This determines how display outputs (HDMI, eDP, DVI, DisplayPort) behave.
 
-* **Legacy Mode:** Display output becomes active as soon as the VM starts.
+* **Legacy Mode (Recommended):**  Display output becomes active as soon as the VM starts.
 * **UPT Mode:** Display output becomes active only after the guest OS drivers have loaded.
-
-> [!TIP]
-> **Legacy Mode is recommended for most setups** because:
-> - Display output works immediately on VM start
-> - Better compatibility with various guest operating systems
 
 ---
 
@@ -142,7 +137,7 @@ qm set [VMID] --machine q35 \
 - **Firmware**: `-bios /path/to/ovmf` or `-pflash /path/to/ovmf`
 - **iGPU PCI device**: 
 ```
--device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=0x2,romfile=/path/to/rom/file
+-device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=2.0,romfile=/path/to/rom/file
 ```
 
 ---
