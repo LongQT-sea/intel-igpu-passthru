@@ -39,7 +39,12 @@
 > Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, then run `update-grub`, `update-initramfs -u` and reboot.
 
 > [!IMPORTANT]
-> **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3]. As of October 2025, this requires Proxmox VE 9 [`Test` repository](https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_test_repo).
+> **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3].
+> 
+> **Ice Lake, Rocket Lake, Tiger Lake, Alder Lake**, and **Raptor Lake**, install QEMU 10.0 if you still want a working boot/splash UEFI display output.[^4]
+> ```
+> apt install pve-qemu-kvm=10.0.2-4
+> ```
 
 > [!TIP]
 > With **Proxmox VE 8.2** and newer, this works without following PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough).
@@ -187,3 +192,4 @@ All product names, trademarks, and registered trademarks are property of their r
 [^1]: When using Intel iGPU SR-IOV virtual functions, some driver versions may cause a Code 43 error on Windows guests. To ensure compatibility across all driver versions, an OpROM is required.
 [^2]: Sandy Bridge and newer. Use `Universal_noGOP_igd.rom` as a last resort if other ROMs cause issues. This `Universal` ROM does not include the Intel GOP driver (UEFI Graphics Output Protocol), so display output will only work after the guest VM drivers are loaded.
 [^3]: You will get this error message on Meteor Lake and newer: `IGD device 0000:00:02.0 is unsupported in legacy mode, try SandyBridge or newer`. This is fixed in QEMU 10.1.x ([git commit](https://github.com/qemu/qemu/commit/7969cf4639794e0af84862a269daac72adcfb554)).
+[^4]: QEMU 10.1+ includes this commit [dd69d84604](https://github.com/qemu/qemu/commit/dd69d84604), which restricts legacy mode to iGPU from Sandy Bridge to Comet Lake.
