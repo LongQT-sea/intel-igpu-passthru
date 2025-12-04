@@ -41,10 +41,7 @@
 > [!IMPORTANT]
 > **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3].
 > 
-> **Ice Lake, Rocket Lake, Tiger Lake, Alder Lake**, and **Raptor Lake**, install QEMU 10.0 if you still want a working boot/splash UEFI display output.[^4]
-> ```
-> apt install pve-qemu-kvm=10.0.2-4
-> ```
+> With **QEMU 10.1+**, legacy mode is restricted to IGD gen 6–9[^4]. If you have **Ice Lake, Rocket Lake, Tiger Lake,** or newer, UEFI GOP display output will likely not work. You will need a custom build of QEMU to make it work, download or build one from here: https://github.com/LongQT-sea/pve-qemu-builder/releases
 
 > [!TIP]
 > With **Proxmox VE 8.2** and newer, this works without following PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough).
