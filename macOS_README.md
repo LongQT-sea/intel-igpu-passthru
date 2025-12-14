@@ -2,7 +2,7 @@
 > [!Important]
 > * Ensure your iGPU is supported. See the [Dortania Intel iGPU Guide](https://dortania.github.io/GPU-Buyers-Guide/modern-gpus/intel-gpu.html).
 > * This document is a reference — you may need to adjust it for your iGPU device ID.
-> * Follow these steps only if macOS is already installed and the OpenCore EFI folder has been copied to the EFI partition of your macOS disk.
+> * Follow these steps only if macOS is already installed and the OpenCore EFI folder has been copied to the EFI partition on your macOS startup disk.
 > * DVMT Pre-Allocated in the BIOS should be set to 128 MB or higher.
 > * Ensure you are using [Legacy Mode](https://github.com/LongQT-sea/intel-igpu-passthru?tab=readme-ov-file#proxmox-ve) for iGPU passthrough.
 
@@ -29,12 +29,12 @@
 Go to the Coffee Lake (or whatever generation you have) section in [WhateverGreen/Manual/FAQ.IntelHD.en.md](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) and look for your device ID:
 
 * If your iGPU device ID appears under ***Native supported DevIDs*** **and** under `Desktop` or `Laptop` in ***Recommended framebuffers***, great — continue to the [**CPU Models**](#4-cpu-models) section.
-* If it's **not** listed, you'll need to spoof your iGPU's device ID to a natively supported device ID from the `Desktop` or `Laptop` category in ***Recommended framebuffers***.
+* If it's **not** listed under ***Native supported DevIDs***, you'll need to spoof your iGPU's device ID to a natively supported device ID from the `Desktop` or `Laptop` category in ***Recommended framebuffers***.
 
 ---
 
 ### 3. Spoofing iGPU device ID
-* For example, if you have a `0x3e94`, you need to spoof it to something like `0x3e9b`, which is a Coffee Lake `Desktop` recommended framebuffer.
+For example, if your Coffee Lake iGPU device ID is `0x3e94` and it is not listed under ***Native supported DevIDs***, you need to spoof it to a supported ID, such as `0x3e9b`, which corresponds to a Coffee Lake `Desktop` recommended framebuffer.
   - **Proxmox VE:**
      ```
      qm set [VMID] -hostpci0 0000:00:02.0,legacy-igd=1,romfile=igd.rom,device-id=0x3e9b
@@ -70,7 +70,15 @@ You have two options:
 > | Comet Lake | `165` |
 
 ### 5. Device Properties
-After configuring the CPUID, it should work if you have a natively supported iGPU. If you don't, you must modify **DeviceProperties** in `config.plist`. For details, see the [Dortania OpenCore Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/).
+> [!Note]
+> From this step onward, basic Hackintosh knowledge is required. Please follow the official guides to fix any iGPU-related issues.
+> Here are a few links you should follow:
+>
+> * [Dortania OpenCore Install Guide](https://dortania.github.io/OpenCore-Install-Guide/config.plist/)
+> * [Dortania OpenCore Intel iGPU Patching](https://dortania.github.io/OpenCore-Post-Install/gpu-patching/intel-patching/)
 
-- Example for Coffee Lake:
+After configuring the CPUID, your iGPU may work if it is natively supported. If it is not, you will need to modify **DeviceProperties** in your `config.plist`.
+
+**Example for Coffee Lake:**
+
 <img width="1191" height="639" alt="image" src="https://github.com/user-attachments/assets/e555da65-c3b3-45c4-bc10-1fd35172a956" />

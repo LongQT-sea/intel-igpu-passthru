@@ -26,14 +26,15 @@
 ---
 
 ## Requirements
-- Intel CPU with integrated graphics *(2nd gen and newer)*
-- Mainboard with VT-d / IOMMU support *(must be enabled in BIOS)*
-- **UEFI only boot mode** *(disable Legacy/CSM in BIOS/UEFI settings)*
-- **Proxmox VE:**
-  - Intel 2nd-10th Gen: Proxmox VE 7.4 or newer
-  - Intel 11th Gen and newer: Proxmox VE 9.0 or newer
-- **Linux Distros:** Modern Linux distributions with QEMU/KVM support
-- **Host kernel:** with IOMMU enabled *(enabled by default on Proxmox VE 8.2 and newer)*
+* Intel CPU with integrated graphics *(2nd generation or newer)*
+* Motherboard with VT-d / IOMMU support *(must be enabled in BIOS/UEFI)*
+* UEFI-only boot mode *(Legacy/CSM must be disabled in BIOS/UEFI settings)*
+* Proxmox VE:
+  * Intel 2nd–10th Gen: **Proxmox VE 7.4 or newer**
+  * Intel 11th Gen and newer: **Proxmox VE 9.0 or newer**
+* Linux distributions: Modern Linux distros with QEMU/KVM support
+* Host kernel: IOMMU enabled *(enabled by default in Proxmox VE 8.2 and newer)*
+* Virtual machine configured to use **OVMF (UEFI) firmware**
 
 > [!IMPORTANT]
 > Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, then run `update-grub`, `update-initramfs -u` and reboot.
@@ -41,7 +42,8 @@
 > [!IMPORTANT]
 > **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3].
 > 
-> With **QEMU 10.1+**, legacy mode is restricted to IGD gen 6–9[^4]. If you have **Ice Lake, Rocket Lake, Tiger Lake,** or newer, UEFI GOP display output will likely not work. You will need a custom build of QEMU to make it work, download or build one from here: https://github.com/LongQT-sea/pve-qemu-builder/releases
+> With **QEMU 10.1+**, Ice Lake, Rocket Lake, Tiger Lake, Alder Lake, and newer CPUs require a custom QEMU build to enable display output at VM startup when using legacy mode, because legacy mode is limited to IGD generations 6–9 (Sandy Bridge to Comet Lake)[^4].
+> If you need UEFI GOP display support, download or build one from here: https://github.com/LongQT-sea/pve-qemu-builder/releases
 
 > [!TIP]
 > With **Proxmox VE 8.2** and newer, this works without following PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough).
@@ -188,5 +190,5 @@ All product names, trademarks, and registered trademarks are property of their r
 
 [^1]: When using Intel iGPU SR-IOV virtual functions, some driver versions may cause a Code 43 error on Windows guests. To ensure compatibility across all driver versions, an OpROM is required.
 [^2]: Sandy Bridge and newer. Use `Universal_noGOP_igd.rom` as a last resort if other ROMs cause issues. This `Universal` ROM does not include the Intel GOP driver (UEFI Graphics Output Protocol), so display output will only work after the guest VM drivers are loaded.
-[^3]: You will get this error message on Meteor Lake and newer: `IGD device 0000:00:02.0 is unsupported in legacy mode, try SandyBridge or newer`. This is fixed in QEMU 10.1.x ([git commit](https://github.com/qemu/qemu/commit/7969cf4639794e0af84862a269daac72adcfb554)).
+[^3]: You will get this error message on Meteor Lake and newer: `IGD device 0000:00:02.0 is unsupported in legacy mode, try SandyBridge or newer`. This is fixed in QEMU 10.1.x ([7969cf4639](https://github.com/qemu/qemu/commit/7969cf4639794e0af84862a269daac72adcfb554)).
 [^4]: QEMU 10.1+ includes this commit [dd69d84604](https://github.com/qemu/qemu/commit/dd69d84604), which restricts legacy mode to iGPU from Sandy Bridge to Comet Lake.
