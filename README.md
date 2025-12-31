@@ -28,7 +28,7 @@
 ## Requirements
 * Intel CPU with integrated graphics *(2nd generation or newer)*
 * Motherboard with VT-d / IOMMU support *(must be enabled in BIOS/UEFI)*
-* UEFI-only boot mode *(Legacy/CSM must be disabled in BIOS/UEFI settings)*
+* UEFI-only boot mode *(Legacy/CSM must be disabled in BIOS/UEFI settings[^5])*
 * Proxmox VE:
   * Intel 2nd–10th Gen: **Proxmox VE 7.4 or newer**
   * Intel 11th Gen and newer: **Proxmox VE 9.0 or newer**
@@ -192,3 +192,4 @@ All product names, trademarks, and registered trademarks are property of their r
 [^2]: Sandy Bridge and newer. Use `Universal_noGOP_igd.rom` as a last resort if other ROMs cause issues. This `Universal` ROM does not include the Intel GOP driver (UEFI Graphics Output Protocol), so display output will only work after the guest VM drivers are loaded.
 [^3]: You will get this error message on Meteor Lake and newer: `IGD device 0000:00:02.0 is unsupported in legacy mode, try SandyBridge or newer`. This is fixed in QEMU 10.1.x ([7969cf4639](https://github.com/qemu/qemu/commit/7969cf4639794e0af84862a269daac72adcfb554)).
 [^4]: QEMU 10.1+ includes this commit [dd69d84604](https://github.com/qemu/qemu/commit/dd69d84604), which restricts legacy mode to iGPU from Sandy Bridge to Comet Lake.
+[^5]: To disable Legacy/CSM, some motherboards might require the operating system being set to Windows. 
