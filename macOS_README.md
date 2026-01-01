@@ -2,7 +2,7 @@
 > [!Important]
 > * Ensure your iGPU is supported. See the [Dortania Intel iGPU Guide](https://dortania.github.io/GPU-Buyers-Guide/modern-gpus/intel-gpu.html).
 > * This document is a reference — you may need to adjust it for your iGPU device ID.
-> * Follow these steps only if macOS is already installed and the OpenCore EFI folder has been copied to the EFI partition on your macOS startup disk.
+> * Follow these steps only after macOS is already installed and the OpenCore EFI folder has been copied to the EFI partition on your macOS startup disk.
 > * DVMT Pre-Allocated in the BIOS should be set to 128 MB or higher.
 > * Ensure you are using [Legacy Mode](https://github.com/LongQT-sea/intel-igpu-passthru?tab=readme-ov-file#proxmox-ve) for iGPU passthrough.
 
@@ -42,7 +42,7 @@ For example, if your Coffee Lake iGPU device ID is `0x3e94` and it is not listed
 
   - **QEMU:**
      ```
-     -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=2.0,romfile=/path/to/rom/file,x-pci-device-id=0x3e9b
+     -device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=2.0,romfile=/usr/share/kvm/igd.rom,x-pci-device-id=0x3e9b
      ```
 
 ---
