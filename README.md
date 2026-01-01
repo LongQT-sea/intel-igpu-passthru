@@ -26,15 +26,21 @@
 ---
 
 ## Requirements
-* Intel CPU with integrated graphics *(2nd generation or newer)*
-* Motherboard with VT-d / IOMMU support *(must be enabled in BIOS/UEFI)*
-* UEFI-only boot mode *(Legacy/CSM must be disabled in BIOS/UEFI settings[^5])*
-* Proxmox VE:
-  * Intel 2nd–10th Gen: **Proxmox VE 7.4 or newer**
-  * Intel 11th Gen and newer: **Proxmox VE 9.0 or newer**
-* Linux distributions: Modern Linux distros with QEMU/KVM support
-* Host kernel: IOMMU enabled *(enabled by default in Proxmox VE 8.2 and newer)*
-* Virtual machine configured to use **OVMF (UEFI) firmware**
+* **Intel CPU with integrated graphics** *(2nd generation or newer)*
+* **BIOS/UEFI settings:**
+  * VGA OpROM set to **UEFI** (usually disabling Legacy/CSM is enough[^5])
+  * Enable **Intel VT-d** (Intel Virtualization for Directed I/O)
+  * Initial/Primary graphics adapter set to **IGD / iGPU / Integrated**
+
+* **Host OS:**
+  * Proxmox VE 9.1 or newer
+  * Modern Linux distributions *(kernel 6.8 or newer)*
+  * **IOMMU** enabled *(enabled by default in Proxmox VE 8.2 and newer)*
+  * Optional: `blacklist i915` **may be required** to enable maximum supported resolution and refresh rate
+
+* **Guest OS:**
+  * Use **OVMF** firmware.
+  * For a headless setup, ensure the guest OS is already installed and has remote access configured (RDP or VNC).
 
 > [!IMPORTANT]
 > Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**) . If it is, remove it, then run `update-grub`, `update-initramfs -u` and reboot.
@@ -42,8 +48,8 @@
 > [!IMPORTANT]
 > **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3].
 > 
-> With **QEMU 10.1+**, Ice Lake, Rocket Lake, Tiger Lake, Alder Lake, and newer CPUs require a custom QEMU build to enable display output at VM startup when using legacy mode, because legacy mode is limited to IGD generations 6–9 (Sandy Bridge to Comet Lake)[^4].
-> If you need UEFI GOP display support, download or build one from here: https://github.com/LongQT-sea/pve-qemu-builder/releases
+> With **QEMU 10.1+**, Ice Lake, Rocket Lake, Tiger Lake, Alder Lake, and newer CPUs require a custom QEMU build to enable display output at VM startup when using legacy mode. This is because legacy mode is limited to IGD generations 6–9 (Sandy Bridge to Comet Lake)[^4].
+> If you need the custom QEMU build, you can download or build it from here: https://github.com/LongQT-sea/pve-qemu-builder/releases
 
 > [!TIP]
 > With **Proxmox VE 8.2** and newer, this works without following PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough).
@@ -64,7 +70,6 @@ Choose the appropriate ROM file for your Intel CPU and download/copy it to `/usr
 ```bash
 curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 ```
-
 | Intel Generation | ROM File | GOP Version | Supported CPUs |
 |------------------|----------|-------------|----------------|
 | Sandy Bridge (2nd gen) | [`SNB_GOPv2_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/SNB_GOPv2_igd.rom) | v2 | Core i3/i5/i7 2xxx |
@@ -123,8 +128,7 @@ qm set [VMID] --machine pc \
 * Open Proxmox VE Shell and run:
 > Replace `[VMID]` with your real VM ID.
 ```bash
-qm set [VMID] --machine q35 \
-              --bios ovmf \
+qm set [VMID] --bios ovmf \
               --hostpci0 0000:00:02.0,romfile=igd.rom \
               --args "-set device.hostpci0.bus=pci.0 -set device.hostpci0.addr=2.0 -set device.hostpci0.x-igd-opregion=on"
 ```
@@ -141,7 +145,7 @@ qm set [VMID] --machine q35 \
 - **Firmware**: `-bios /path/to/ovmf` or `-pflash /path/to/ovmf`
 - **iGPU PCI device**: 
 ```
--device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=2.0,romfile=/path/to/rom/file
+-device vfio-pci,host=0000:00:02.0,id=hostpci0,bus=pci.0,addr=2.0,romfile=/usr/share/kvm/igd.rom
 ```
 
 ---
@@ -150,7 +154,7 @@ qm set [VMID] --machine q35 \
 
 - [QEMU IGD assignment documentation](https://github.com/qemu/qemu/blob/master/docs/igd-assign.txt)
 - [Intel EDK2 GVT-d patchset (from eci.intel.com)](https://eci.intel.com/docs/3.3/components/kvm-hypervisor.html#build-ovmf-fd-for-kvm)
-- [Intel GVT-d Documentation](https://github.com/intel/gvt-linux/wiki)
+- [Intel GVT-d Documentation](https://github.com/intel/gvt-linux/wiki/GVTd_Setup_Guide)
 
 ## Credits & Acknowledgments
 
@@ -192,4 +196,4 @@ All product names, trademarks, and registered trademarks are property of their r
 [^2]: Sandy Bridge and newer. Use `Universal_noGOP_igd.rom` as a last resort if other ROMs cause issues. This `Universal` ROM does not include the Intel GOP driver (UEFI Graphics Output Protocol), so display output will only work after the guest VM drivers are loaded.
 [^3]: You will get this error message on Meteor Lake and newer: `IGD device 0000:00:02.0 is unsupported in legacy mode, try SandyBridge or newer`. This is fixed in QEMU 10.1.x ([7969cf4639](https://github.com/qemu/qemu/commit/7969cf4639794e0af84862a269daac72adcfb554)).
 [^4]: QEMU 10.1+ includes this commit [dd69d84604](https://github.com/qemu/qemu/commit/dd69d84604), which restricts legacy mode to iGPU from Sandy Bridge to Comet Lake.
-[^5]: To disable Legacy/CSM, some motherboards might require the operating system being set to Windows. 
+[^5]: To disable Legacy/CSM, some motherboards might require setting the OS Type to Windows.
