@@ -47,12 +47,7 @@
 > Make sure **`disable_vga=1`** is not set anywhere in **`/etc/modprobe.d/vfio.conf`** or in your kernel parameters (**`/etc/default/grub`**). If it is, remove it, then run `update-grub`, `update-initramfs -u` and reboot.
 
 > [!IMPORTANT]
-> **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1.0** or newer (`kvm --version`)[^3].
-> 
-> With **QEMU 10.1+**[^4], Ice Lake, Rocket Lake, Tiger Lake, Alder Lake, and newer CPUs require additional QEMU argument to enable display output at VM startup when using legacy mode: `-set device.hostpci0.x-igd-lpc=on`<br>
-> ```
-> qm set [VMID] --args "-set device.hostpci0.x-igd-lpc=on"
-> ```
+> **Meteor Lake**, **Arrow Lake**, **Lunar Lake** and future Intel iGPU require **QEMU 10.1+** (`kvm --version`)[^3].
 
 > [!TIP]
 > With **Proxmox VE 8.2** and newer, this works without following PCI passthrough guides such as [Proxmox PCI Passthrough](https://pve.proxmox.com/wiki/PCI_Passthrough).
@@ -118,6 +113,11 @@ qm set [VMID] --machine pc \
               --bios ovmf \
               --hostpci0 0000:00:02.0,legacy-igd=1,romfile=igd.rom
 ```
+> [!IMPORTANT]
+> Ice Lake, Rocket Lake, Tiger Lake, Alder Lake, and newer CPUs require additional QEMU argument[^4]:
+> ```
+> qm set [VMID] --args "-set device.hostpci0.x-igd-lpc=on"
+> ```
 
 > [!TIP]
 > In legacy mode passthrough, these custom args are not needed:
