@@ -99,7 +99,7 @@ curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 **Choose a mode:** This determines how display outputs (HDMI, eDP, DVI, DisplayPort) behave.
 
 * **Legacy Mode (Recommended):**  Display output becomes active as soon as the VM starts.
-* **UPT Mode:** Display output becomes active only after the guest OS drivers have loaded.
+* **UPT Mode (Experimental):** Display output becomes active only after the guest OS drivers have loaded.
 
 ---
 
@@ -127,6 +127,12 @@ qm set [VMID] --machine pc \
 ---
 
 #### **UPT Mode**
+> [!WARNING]
+> **UPT Mode is not officially supported by this project.**
+>
+> The configuration below is provided as a convenience for advanced users and testers.
+>
+> Bug reports related exclusively to UPT mode may be closed without investigation.
 
 * Open Proxmox VE Shell and run:
 > Replace `[VMID]` with your real VM ID.
