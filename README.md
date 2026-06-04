@@ -84,6 +84,7 @@ curl -L <ROM_URL> -o /usr/share/kvm/igd.rom
 | Alder Lake-N / Twin Lake (N-series) | [`ADL-N_TWL_GOPv21_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ADL-N_TWL_GOPv21_igd.rom) | v21 |  N95/N97/N1xx/N2xx/N3xx |
 | Arrow Lake / Meteor Lake | [`ARL_MTL_GOPv22_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/ARL_MTL_GOPv22_igd.rom) | v22 | Core Ultra series |
 | Lunar Lake | [`LNL_GOPv2X_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/LNL_GOPv2X_igd.rom) | (unknown) | Core Ultra series |
+| Panther Lake-H | [`PTL-H_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/PTL-H_igd.rom) | (unknown) | Core Ultra series |
 | All Gens - No UEFI GOP | [`Universal_noGOP_igd.rom`](https://github.com/LongQT-sea/intel-igpu-passthru/releases/download/v0.1/Universal_noGOP_igd.rom) | (none) | All Intel CPUs with iGPU[^2] |
 
 > [!Note]
